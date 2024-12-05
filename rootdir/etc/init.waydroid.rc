@@ -1,0 +1,62 @@
+on boot
+    # Allow to access WebView
+    chmod 0755 /sys/kernel/debug
+    chmod 0755 /sys/kernel/debug/tracing
+    #setprop persist.waydroid.width 720
+    #setprop persist.waydroid.height 1280
+on property:sys.boot_completed=1
+    start adbd
+
+#on post-fs-data
+ #   mkdir /data/icons 0775 system system
+  #  mkdir /data/waydroid_tmp 0755 host system
+
+#service vendor.audio-hal-2-0 /vendor/bin/hw/android.hardware.audio@2.0-service
+ #   override
+  #  class hal
+   # user host
+    # media gid needed for /dev/fm (radio) and for /data/misc/media (tee)
+    #group audioserver audio camera drmrpc inet media mediadrm net_bt net_bt_admin net_bw_acct wakelock
+    #capabilities BLOCK_SUSPEND
+    #ioprio rt 4
+    #writepid /dev/cpuset/foreground/tasks /dev/stune/foreground/tasks
+    # audioflinger restarts itself when it loses connection with the hal
+    # and its .rc file has an "onrestart restart audio-hal" rule, thus
+    # an additional auto-restart from the init process isn't needed.
+    #oneshot
+    #interface android.hardware.audio@4.0::IDevicesFactory default
+    #interface android.hardware.audio@2.0::IDevicesFactory default
+
+#service vendor.audio-hal /vendor/bin/hw/android.hardware.audio.service
+ #   override
+  #  class hal
+   # user host
+    # media gid needed for /dev/fm (radio) and for /data/misc/media (tee)
+    #group audioserver audio camera drmrpc inet media mediadrm net_bt net_bt_admin net_bw_acct wakelock context_hub
+    #capabilities BLOCK_SUSPEND
+    #ioprio rt 4
+    #task_profiles ProcessCapacityHigh HighPerformance
+    #onrestart restart audioserver
+
+#service vendor.hwcomposer-2-1 /vendor/bin/hw/android.hardware.graphics.composer@2.1-service --desktop_file_hint=Waydroid.desktop
+ #   override
+  #  class hal animation
+   # user host
+    #group system graphics drmrpc
+    #capabilities SYS_NICE
+    #onrestart restart surfaceflinger
+    #writepid /dev/cpuset/system-background/tasks
+
+service vendor.camera-provider-2-4 /vendor/bin/hw/android.hardware.camera.provider@2.4-service
+    override
+    interface android.hardware.camera.provider@2.4::ICameraProvider legacy/0
+    class hal
+    user cameraserver
+    group audio camera input drmrpc
+    ioprio rt 4
+    capabilities SYS_NICE
+    oneshot
+    writepid /dev/cpuset/camera-daemon/tasks /dev/stune/top-app/tasks
+
+#on property:ro.vndk.version=28
+#    mount none /dev/null /vendor_extra/lib/libmedia_codecserviceregistrant.so ro bind
