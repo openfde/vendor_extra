@@ -5,3 +5,5 @@
 /run                      u:object_r:rootfs:s0
 /var                      u:object_r:rootfs:s0
 #/tmp                      u:object_r:rootfs:s0
+/volumes                  u:object_r:rootfs:s0
+/sockets                  u:object_r:rootfs:s0
