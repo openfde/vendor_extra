@@ -7,3 +7,4 @@
 #/tmp                      u:object_r:rootfs:s0
 /volumes                  u:object_r:rootfs:s0
 /sockets                  u:object_r:rootfs:s0
+/tmpx11             u:object_r:shell_data_file:s0
