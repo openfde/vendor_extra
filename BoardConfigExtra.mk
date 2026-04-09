@@ -17,7 +17,7 @@
 EXTRA_VENDOR_PATH := vendor/extra
 
 # Filesystem
-BOARD_ROOT_EXTRA_FOLDERS := odm_extra vendor_extra mnt_extra run var volumes sockets
+BOARD_ROOT_EXTRA_FOLDERS := odm_extra vendor_extra mnt_extra run var volumes sockets usr hybris
 
 # Sepolicy
 SYSTEM_EXT_PRIVATE_SEPOLICY_DIRS += $(EXTRA_VENDOR_PATH)/sepolicy/private
